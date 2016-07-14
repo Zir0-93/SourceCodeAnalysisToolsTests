@@ -13,6 +13,9 @@ import org.jboss.forge.roaster.Roaster;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.clarity.parser.Lang;
+import com.clarity.parser.ParseRequestContent;
+import com.clarity.parser.ParseService;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.thoughtworks.qdox.JavaDocBuilder;
@@ -94,4 +97,17 @@ public class SourceCodeAnalysisToolsTest {
 		System.out.println(TestUtils.resultMessage(repositoryUser, repositoryName, totalTime, "Roasterr"));
 	}
 
+	@Test
+	public void ClarpseLoadTest() throws Exception  {
+		ParseRequestContent rawData = new ParseRequestContent(Lang.JAVA);
+		List<RawFile> files = codebase.getSourceFiles();
+		for (RawFile file : files) {
+			rawData.insertFile(new com.clarity.parser.RawFile(file.name(), file.content()));
+		}
+		final ParseService parser = new ParseService();
+		final long startTime = new Date().getTime();
+		parser.parseProject(rawData); 
+		long totalTime = new Date().getTime() - startTime;
+		System.out.println(TestUtils.resultMessage(repositoryUser, repositoryName, totalTime, "Clarpse"));
+	}
 }
