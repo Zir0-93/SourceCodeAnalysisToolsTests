@@ -35,39 +35,6 @@ public class SourceCodeAnalysisToolsTest {
 		codebase = TestUtils.extractProjectFromArchive(new ByteArrayInputStream(repoStream.getBaos()), repositoryName);
 	}
 	
-	@Test
-	public void QDoxLoadTest()  {
-		
-		List<RawFile> files = codebase.getSourceFiles();
-		JavaDocBuilder qDoxBuilder = new JavaDocBuilder();
-		long totalTime = 0;
-		for (RawFile file : files) {
-			StringReader sr = new StringReader(file.content());
-			final long startTime = new Date().getTime();
-			qDoxBuilder.addSource(sr);
-			totalTime += new Date().getTime() - startTime;
-		}
-		
-		System.out.println(TestUtils.resultMessage(repositoryUser, repositoryName, totalTime, "QDox"));
-	}
-	
-	@Test
-	public void JDTLoadTest()  {
-		
-		List<RawFile> files = codebase.getSourceFiles();
-		long totalTime = 0;
-		for (RawFile file : files) {
-		    ASTParser parser = ASTParser.newParser(AST.JLS4);
-		    parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		    parser.setSource(file.content().toCharArray());
-		    parser.setResolveBindings(true);
-		    final long startTime = new Date().getTime();
-		    final CompilationUnit parse = (CompilationUnit) parser.createAST(null);
-			totalTime += new Date().getTime() - startTime;
-		}
-		
-		System.out.println(TestUtils.resultMessage(repositoryUser, repositoryName, totalTime, "Eclipse JDT"));
-	}
 	
 	@Test
 	public void JavaParserTest() throws ParseException  {
